@@ -24,7 +24,7 @@ function onSubmit(e) {
       });
     }
   }
-  var text = 'New visitor `' + visitorName + '` was recorded';
+  var text = 'New visitor `' + visitorName + '` was recorded'
   var blocks = [
     {
       type: 'section',
@@ -32,12 +32,10 @@ function onSubmit(e) {
         type: 'mrkdwn',
         text: text,
       },
-    },
-    {
+    }, {
       type: 'section',
       fields: fields,
-    },
-    {
+    }, {
       type: 'actions',
       elements: [
         {
@@ -50,7 +48,7 @@ function onSubmit(e) {
           url: getWebAppURL() + '?id=' + id,
         },
       ],
-    },
+    }
   ];
   notifySlack({blocks: blocks, text: text});
 }
@@ -168,8 +166,10 @@ function doPost(e) {
     template = createFormTemplate();
     template.label = 'Update';
     var values = row.getValues();
-    values[0][7] = new Date();
+    var now = new Date();
+    values[0][7] = now;
     row.setValues(values);
+    notifySlack({ text: values[0][2] + ' was mark as left at ' + now });
   }
   template.id = id;
   return addMetaTags(template.evaluate());
