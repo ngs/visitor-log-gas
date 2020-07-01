@@ -9,45 +9,50 @@ function onSubmit(e) {
   values[0][8] = id;
   row.setValues(values);
   Logger.log('ID: ' + id + ' Timestamp: ' + timestamp);
-  var blocks = [
-    {
-      type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text: 'New visitor was recorded',
-      },
-    },
-  ];
   var fields = [];
+  var visitorName = 'Unknown';
   for (var i = 0; i < itemResponses.length; i++) {
     var value = itemResponses[i].getResponse();
     var title = itemResponses[i].getItem().getTitle();
     if (title) {
+      if (/visitor/i.test(title)) {
+        visitorName = value;
+      }
       fields.push({
         type: 'mrkdwn',
         text: '*' + title + '*\n\t' + value,
       });
     }
   }
-  blocks.push({
-    type: 'section',
-    fields: fields,
-  });
-  blocks.push({
-    type: 'actions',
-    elements: [
-      {
-        type: 'button',
-        text: {
-          type: 'plain_text',
-          text: 'Mark as left',
-          emoji: true,
-        },
-        url: getWebAppURL() + '?id=' + id,
+  var text = 'New visitor `' + visitorName + '` was recorded';
+  var blocks = [
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: text,
       },
-    ],
-  });
-  notifySlack({blocks: blocks});
+    },
+    {
+      type: 'section',
+      fields: fields,
+    },
+    {
+      type: 'actions',
+      elements: [
+        {
+          type: 'button',
+          text: {
+            type: 'plain_text',
+            text: 'Mark as left',
+            emoji: true,
+          },
+          url: getWebAppURL() + '?id=' + id,
+        },
+      ],
+    },
+  ];
+  notifySlack({blocks: blocks, text: text});
 }
 
 function notifySlack(payload) {
