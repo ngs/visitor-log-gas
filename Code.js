@@ -3,12 +3,13 @@ function onSubmit(e) {
   var response = e.response;
   var id = response.getId();
   var timestamp = response.getTimestamp();
+  Logger.log('ID: ' + id + ' Timestamp: ' + timestamp);
   var itemResponses = response.getItemResponses();
+  Utilities.sleep(5000);
   var row = findResponseRow(response);
   var values = row.getValues();
   values[0][8] = id;
   row.setValues(values);
-  Logger.log('ID: ' + id + ' Timestamp: ' + timestamp);
   var fields = [];
   var visitorName = 'Unknown';
   for (var i = 0; i < itemResponses.length; i++) {
