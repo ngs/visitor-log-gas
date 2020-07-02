@@ -52,6 +52,13 @@ function onSubmit(e) {
     }
   ];
   notifySlack({blocks: blocks, text: text});
+  updateNumberFormat();
+}
+
+function updateNumberFormat() {
+    var sheet = getSheet();
+    sheet.getRange('H1:H' + sheet.getLastRow()).setNumberFormat('yyyy/MM/dd hh:mm:ss');
+    sheet.getRange('A1:A' + sheet.getLastRow()).setNumberFormat('yyyy/MM/dd hh:mm:ss');
 }
 
 function notifySlack(payload) {
